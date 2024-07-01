@@ -96,7 +96,7 @@ public class SalariesService : ISalariesService
 		var childNodes = nodes[node.Id];
 		foreach (var childNode in childNodes)
 		{
-			node.AddChildNode(childNode);//todo
+			node.AddChildNode(childNode);
 		}
 	}
 
