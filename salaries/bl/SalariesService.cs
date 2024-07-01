@@ -30,11 +30,27 @@ public class SalariesService : ISalariesService
 
 	}
 
-	public async Task<decimal> GetMonthlySalaryForAllOrganizationMembersAsync(DateTime date)
+	public async Task<IEnumerable<OrganizationMemberRead>> GetMonthlySalaryForEachMemberAsync(DateTime date)
 	{
 		var membersDict = await GetMembersDictAsync();
-		return membersDict.Sum(x => x.Value.CalculateFullSalary(date));
+
+		List<OrganizationMemberRead> res = new List<OrganizationMemberRead>();
+
+		foreach (var member in membersDict)
+		{
+			OrganizationMemberBase selectedNode = membersDict[member.Key];
+			var salary = member.Value.CalculateFullSalary(date);
+			res.Add(new OrganizationMemberRead
+			{
+				Id = member.Value.Id,
+				Name = member.Value.Name,
+				Salary = salary
+			});
+		}
+
+		return res;
 	}
+
 
 	private async Task<Dictionary<int, OrganizationMemberBase>> GetMembersDictAsync()
 	{

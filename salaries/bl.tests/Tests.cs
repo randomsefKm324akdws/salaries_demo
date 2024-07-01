@@ -612,10 +612,10 @@ public class Tests
 		//assert
 		Assert.AreEqual(employee4FullSalary, salary);
 	}
-
-
+	
+	
 	[Test]
-	public async Task Test_AllOrganizationMembersSalary()
+	public async Task Test_GetMonthlySalaryForEachMemberAsync()
 	{
 		//arrange
 		var mockRepo = new Mock<IOrganizationMembersRepository>();
@@ -705,10 +705,16 @@ public class Tests
 
 		//act
 		ISalariesService service = new SalariesService(mockRepo.Object, new TestConfiguration());
-		var salary = await service.GetMonthlySalaryForAllOrganizationMembersAsync(dateTime);
+		var res = (await service.GetMonthlySalaryForEachMemberAsync(dateTime)).ToArray();
 
 		//assert
-		Assert.AreEqual(allMembersExpectedSalary, salary);
+		Assert.AreEqual(allMembersExpectedSalary, res.Sum(x=>x.Salary));
+		Assert.AreEqual(sales1FullSalary, res.Single(x=>x.Id == 1).Salary);
+		Assert.AreEqual(employee2FullSalary, res.Single(x=>x.Id == 2).Salary);
+		Assert.AreEqual(employee3FullSalary, res.Single(x=>x.Id == 3).Salary);
+		Assert.AreEqual(employee4FullSalary, res.Single(x=>x.Id == 4).Salary);
+		Assert.AreEqual(manager5FullSalary, res.Single(x=>x.Id == 5).Salary);
+		Assert.AreEqual(employee6FullSalary, res.Single(x=>x.Id == 6).Salary);
 	}
 
 
