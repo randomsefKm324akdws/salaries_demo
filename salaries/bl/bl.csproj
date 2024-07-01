@@ -10,8 +10,4 @@
       <ProjectReference Include="..\da.interfaces\da.interfaces.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\Read" />
-    </ItemGroup>
-
 </Project>
