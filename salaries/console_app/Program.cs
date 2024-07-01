@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using bl;
-using bl.Exceptions;
 using da;
 using da.interfaces.IOrganizationMembersRepository;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,13 +32,13 @@ internal class Program
 
 			var salariesService = serviceProvider.GetService<ISalariesService>();
 			var res = (await salariesService.GetMonthlySalaryForEachMemberAsync(salaryForDateTime)).ToArray();
-			foreach (var member in res.OrderBy(x=>x.Id))
+			foreach (var member in res.OrderBy(x => x.Id))
 			{
 				Console.WriteLine("Salary for member Id " + member.Id + " (" + member.Name + "): " + member.Salary);
 			}
-				
-			Console.WriteLine("Total Salary for all organization members: " + res.Sum(x=>x.Salary));
-			
+
+			Console.WriteLine("Total Salary for all organization members: " + res.Sum(x => x.Salary));
+
 			Console.WriteLine("End. Press any key");
 			Console.ReadKey();
 		}
