@@ -1,4 +1,5 @@
-﻿using bl.Helpers;
+﻿using System.Collections.ObjectModel;
+using bl.Helpers;
 
 namespace bl.Models;
 
@@ -17,12 +18,14 @@ internal abstract class OrganizationMemberBase
 	public decimal BaseSalary { get; init; }
 
 	public int? ParentId { get; init; } //manager
-	
-	public List<OrganizationMemberBase> ChildNodes { get; } = new();
+
+	private readonly List<OrganizationMemberBase> _childNodesPrivate = new();
+
+	public IList<OrganizationMemberBase> ChildNodes => new ReadOnlyCollection<OrganizationMemberBase>(_childNodesPrivate);
 
 	public virtual void AddChildNode(OrganizationMemberBase node)
 	{
-		ChildNodes.Add(node);
+		_childNodesPrivate.Add(node);
 	}
 	
 
