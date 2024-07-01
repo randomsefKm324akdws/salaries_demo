@@ -10,14 +10,7 @@ internal class Employee : OrganizationMemberBase
 		return 0;
 	}
 	
-	public override void AddChildNodes(IEnumerable<OrganizationMemberBase> nodes)
-	{
-		if (!nodes.Any())
-		{
-			return;
-		}
-		throw new Exception("Employee cannot have child members.");
-	}
+	public override void AddChildNodes(IEnumerable<OrganizationMemberBase> nodes) => throw new Exception("Employee cannot have child members.");
 
 	public Employee(IConfiguration configuration) : base(configuration)
 	{

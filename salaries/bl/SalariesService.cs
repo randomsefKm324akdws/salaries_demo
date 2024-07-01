@@ -82,7 +82,11 @@ public class SalariesService : ISalariesService
 			var top = stk.Pop();
 
 			//process top stack node:
-			top.AddChildNodes(nodes[top.Id]);
+			var topNodeChildNodes = nodes[top.Id].ToArray();
+			if (topNodeChildNodes.Any())
+			{
+				top.AddChildNodes(topNodeChildNodes);
+			}
 			//
 
 			foreach (var child in top.ChildNodes)
