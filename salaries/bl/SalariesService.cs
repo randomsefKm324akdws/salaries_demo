@@ -19,27 +19,19 @@ public class SalariesService : ISalariesService
 	{
 		var membersDict = await GetMembersDictAsync();
 
-		if (!membersDict.ContainsKey(organizationMemberId))
-		{
-			throw new MemberNotFoundException();
-		}
-
-		var selectedNode = membersDict[organizationMemberId];
-		var salary = selectedNode.CalculateFullSalary(date);
-		return salary;
-
+		return GetMonthlySalaryForMember(organizationMemberId, date, membersDict);
 	}
+
 
 	public async Task<IEnumerable<OrganizationMemberRead>> GetMonthlySalaryForEachMemberAsync(DateTime date)
 	{
 		var membersDict = await GetMembersDictAsync();
 
-		List<OrganizationMemberRead> res = new List<OrganizationMemberRead>();
+		var res = new List<OrganizationMemberRead>();
 
 		foreach (var member in membersDict)
 		{
-			OrganizationMemberBase selectedNode = membersDict[member.Key];
-			var salary = member.Value.CalculateFullSalary(date);
+			var salary = GetMonthlySalaryForMember(member.Value.Id, date, membersDict);
 			res.Add(new OrganizationMemberRead
 			{
 				Id = member.Value.Id,
@@ -49,6 +41,18 @@ public class SalariesService : ISalariesService
 		}
 
 		return res;
+	}
+
+	private decimal GetMonthlySalaryForMember(int organizationMemberId, DateTime date, Dictionary<int, OrganizationMemberBase> membersDict)
+	{
+		if (!membersDict.ContainsKey(organizationMemberId))
+		{
+			throw new MemberNotFoundException();
+		}
+
+		var selectedNode = membersDict[organizationMemberId];
+		var salary = selectedNode.CalculateFullSalary(date);
+		return salary;
 	}
 
 
@@ -68,7 +72,7 @@ public class SalariesService : ISalariesService
 	{
 		var nodes = blObjects.ToLookup(d => d.ParentId);
 		var rootNodes = nodes[null].ToArray();
-		
+
 		foreach (var rootNode in rootNodes)
 		{
 			FillChildNodesTraverseDfs(rootNode, nodes);
@@ -104,7 +108,7 @@ public class SalariesService : ISalariesService
 			}
 		}
 	}
-	
+
 	private OrganizationMemberBase CreateBlModel(OrganizationMemberReadDto dto)
 	{
 		return dto.OrganizationMemberType switch
