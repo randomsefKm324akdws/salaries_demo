@@ -82,7 +82,7 @@ public class SalariesService : ISalariesService
 			var top = stk.Pop();
 
 			//process top stack node:
-			ProcessTopStackNode(top, nodes);
+			top.AddChildNodes(nodes[top.Id]);
 			//
 
 			foreach (var child in top.ChildNodes)
@@ -92,14 +92,6 @@ public class SalariesService : ISalariesService
 		}
 	}
 
-	private static void ProcessTopStackNode(OrganizationMemberBase node, ILookup<int?, OrganizationMemberBase> nodes)
-	{
-		var childNodes = nodes[node.Id];
-		foreach (var childNode in childNodes)
-		{
-			node.AddChildNode(childNode);
-		}
-	}
 
 	// var 2: DFS with recursion:
 	// 	private static void FillChildNodesTraverseDfs(OrganizationMemberBase node, ILookup<int?, OrganizationMemberBase> nodes)

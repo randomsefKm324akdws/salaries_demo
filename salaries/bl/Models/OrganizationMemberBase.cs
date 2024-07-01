@@ -23,9 +23,9 @@ internal abstract class OrganizationMemberBase
 
 	public IList<OrganizationMemberBase> ChildNodes => new ReadOnlyCollection<OrganizationMemberBase>(_childNodesPrivate);
 
-	public virtual void AddChildNode(OrganizationMemberBase node)
+	public virtual void AddChildNodes(IEnumerable<OrganizationMemberBase> nodes)
 	{
-		_childNodesPrivate.Add(node);
+		_childNodesPrivate.AddRange(nodes);
 	}
 	
 
