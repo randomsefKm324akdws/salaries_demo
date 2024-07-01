@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using bl;
+using bl.Exceptions;
 using da;
 using da.interfaces.IOrganizationMembersRepository;
 using Microsoft.Extensions.DependencyInjection;

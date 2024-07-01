@@ -1,4 +1,5 @@
-﻿using bl.Models;
+﻿using bl.Exceptions;
+using bl.Models;
 using da.interfaces.IOrganizationMembersRepository;
 
 namespace bl;
