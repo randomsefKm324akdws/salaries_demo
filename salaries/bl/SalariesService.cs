@@ -33,19 +33,13 @@ public class SalariesService : ISalariesService
 	public async Task<decimal> GetMonthlySalaryForAllOrganizationMembersAsync(DateTime date)
 	{
 		var membersDict = await GetMembersDictAsync();
-		decimal salaryForAllOrganizationMembers = 0;
-		foreach (var x in membersDict)
-		{
-			salaryForAllOrganizationMembers += x.Value.CalculateFullSalary(date);
-		}
-
-		return salaryForAllOrganizationMembers;
+		return membersDict.Sum(x => x.Value.CalculateFullSalary(date));
 	}
 
 	private async Task<Dictionary<int, OrganizationMemberBase>> GetMembersDictAsync()
 	{
 		var flatDtos = await _organizationMembersRepository.GetAsync();
-		var blObjects = flatDtos.Select(CreateEmployeeBlModel).ToArray();
+		var blObjects = flatDtos.Select(CreateBlModel).ToArray();
 
 		FillChildNodesForEachNode(blObjects);
 
@@ -95,7 +89,7 @@ public class SalariesService : ISalariesService
 		}
 	}
 	
-	private OrganizationMemberBase CreateEmployeeBlModel(OrganizationMemberReadDto dto)
+	private OrganizationMemberBase CreateBlModel(OrganizationMemberReadDto dto)
 	{
 		return dto.OrganizationMemberType switch
 		{
