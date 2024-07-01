@@ -519,8 +519,6 @@ public class Tests
 		var dateTime = new DateTime(2039, 2, 1);
 
 		//expected salary calculation:
-		var yearsWorked = 20;
-
 		var employee6FullSalary = baseSalary + baseSalary * _cfg.EmployeeMaxPossibleLongWorkIncreasePercent;
 
 		//act
