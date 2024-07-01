@@ -19,8 +19,14 @@ public class SalariesService : ISalariesService
 	public async Task<decimal> GetMonthlySalaryAsync(int organizationMemberId, DateTime date)
 	{
 		var membersDict = await GetMembersDictAsync();
+		if (!membersDict.ContainsKey(organizationMemberId))
+		{
+			throw new MemberNotFoundException();
+		}
 
-		return GetMonthlySalaryForMember(organizationMemberId, date, membersDict);
+		var selectedNode = membersDict[organizationMemberId];
+		var salary = selectedNode.CalculateFullSalary(date);
+		return salary;
 	}
 
 
@@ -36,7 +42,7 @@ public class SalariesService : ISalariesService
 		{
 			try
 			{
-				var salary = GetMonthlySalaryForMember(member.Value.Id, date, membersDict);
+				var salary = member.Value.CalculateFullSalary(date);
 				res.Add(new OrganizationMemberRead
 				{
 					Id = member.Value.Id,
@@ -57,19 +63,6 @@ public class SalariesService : ISalariesService
 
 		return res;
 	}
-
-	private decimal GetMonthlySalaryForMember(int organizationMemberId, DateTime date, Dictionary<int, OrganizationMemberBase> membersDict)
-	{
-		if (!membersDict.ContainsKey(organizationMemberId))
-		{
-			throw new MemberNotFoundException();
-		}
-
-		var selectedNode = membersDict[organizationMemberId];
-		var salary = selectedNode.CalculateFullSalary(date);
-		return salary;
-	}
-
 
 	private async Task<Dictionary<int, OrganizationMemberBase>> GetMembersDictAsync()
 	{
