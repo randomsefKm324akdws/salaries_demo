@@ -7,5 +7,5 @@ public class OrganizationMemberReadDto
 	public string Name { get; set; }
 	public DateTime WorkStartDate { get; set; }
 	public decimal BaseSalary { get; set; }
-	public int OrganizationMemberType { get; set; } //todo 1-employee, 2-manager, 3-sales
+	public int OrganizationMemberType { get; set; } //1-employee, 2-manager, 3-sales
 }
