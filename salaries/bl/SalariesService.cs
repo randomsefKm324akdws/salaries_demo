@@ -47,14 +47,14 @@ public class SalariesService : ISalariesService
 		var flatDtos = await _organizationMembersRepository.GetAsync();
 		var blObjects = flatDtos.Select(CreateEmployeeBlModel).ToArray();
 
-		FIllChildNodesForEachNode(blObjects);
+		FillChildNodesForEachNode(blObjects);
 
 		var membersDict = blObjects.ToDictionary(x => x.Id);
 		return membersDict;
 	}
 
 
-	private static void FIllChildNodesForEachNode(OrganizationMemberBase[] blObjects)
+	private static void FillChildNodesForEachNode(OrganizationMemberBase[] blObjects)
 	{
 		var nodes = blObjects.ToLookup(d => d.ParentId);
 		var rootNodes = nodes[null].ToArray();
@@ -66,7 +66,6 @@ public class SalariesService : ISalariesService
 	}
 
 
-	// var 1: DFS without recursion:
 	private static void FillChildNodesTraverseDfs(OrganizationMemberBase node, ILookup<int?, OrganizationMemberBase> nodes)
 	{
 		if (node == null)
@@ -95,25 +94,7 @@ public class SalariesService : ISalariesService
 			}
 		}
 	}
-
-
-	// var 2: DFS with recursion:
-	// 	private static void FillChildNodesTraverseDfs(OrganizationMemberBase node, ILookup<int?, OrganizationMemberBase> nodes)
-	// {
-	// 	var childNodes = nodes[node.Id];
-	// 	foreach (var childNode in childNodes)
-	// 	{
-	// 		node.ChildNodes.Add(childNode);	
-	// 	}
-	// 	
-	//
-	// 	foreach (var childNode in node.ChildNodes)
-	// 	{
-	// 		FillChildNodesTraverseDfs(childNode, nodes);
-	// 	}
-	// }
-
-
+	
 	private OrganizationMemberBase CreateEmployeeBlModel(OrganizationMemberReadDto dto)
 	{
 		return dto.OrganizationMemberType switch
