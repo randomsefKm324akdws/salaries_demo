@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using bl.Exceptions;
+﻿using bl.Exceptions;
 using bl.Models;
 using da.interfaces.IOrganizationMembersRepository;
 
@@ -34,33 +33,18 @@ public class SalariesService : ISalariesService
 	{
 		var membersDict = await GetMembersDictAsync();
 
-		var res = new ConcurrentBag<OrganizationMemberRead>();
-
-		var exceptions = new ConcurrentQueue<Exception>();
-
-		Parallel.ForEach(membersDict, member =>
+		var res = new List<OrganizationMemberRead>();
+		foreach (var member in membersDict)
 		{
-			try
+			var salary = member.Value.CalculateFullSalary(date);
+			res.Add(new OrganizationMemberRead
 			{
-				var salary = member.Value.CalculateFullSalary(date);
-				res.Add(new OrganizationMemberRead
-				{
-					Id = member.Value.Id,
-					Name = member.Value.Name,
-					Salary = salary
-				});
-			}
-			catch (Exception e)
-			{
-				exceptions.Enqueue(e);
-			}
-		});
-
-		if (!exceptions.IsEmpty)
-		{
-			throw new AggregateException(exceptions);
+				Id = member.Value.Id,
+				Name = member.Value.Name,
+				Salary = salary
+			});
 		}
-
+		
 		return res;
 	}
 
