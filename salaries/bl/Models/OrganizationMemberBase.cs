@@ -36,23 +36,24 @@ internal abstract class OrganizationMemberBase
 	protected abstract decimal CalculatePositionBonus(DateTime date);
 	
 	private decimal? _cachedCalculatedSalary;
+	private DateTime? _cachedCalculatedSalaryForDate;
 
 	public decimal CalculateFullSalary(DateTime date)
 	{
-		if (_cachedCalculatedSalary != null)
+		if (_cachedCalculatedSalary != null && _cachedCalculatedSalaryForDate == date)
 		{
 			return (decimal)_cachedCalculatedSalary;
 		}
 
-		if (date < WorkStartDate)
+		decimal total = 0;
+		if (date > WorkStartDate)
 		{
-			return 0;
+			total = CalculateLongWorkSalary(date) + CalculatePositionBonus(date);
 		}
-
-		var total = CalculateLongWorkSalary(date) + CalculatePositionBonus(date);
-
+		
 		_cachedCalculatedSalary = total;
-
+		_cachedCalculatedSalaryForDate = date;
+		
 		return total;
 	}
 
